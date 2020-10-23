@@ -60,6 +60,11 @@
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+				<artifactId>pagehelper</artifactId>
+		</dependency><!-- pageHelper自带page对象，实际上也是个ArrayList -->
+		
 		<!-- dubbo相关 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
