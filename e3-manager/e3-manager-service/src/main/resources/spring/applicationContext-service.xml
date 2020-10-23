@@ -21,5 +21,6 @@
 	<dubbo:protocol name="dubbo" port="20880" />
 	<!-- 声明需要暴露的服务接口 -->
 	<dubbo:service interface="com.e3mall.service.TbItemService" ref="tbItemServiceImpl" />
+	<dubbo:service interface="com.e3mall.service.ItemCatService" ref="itemCatServiceImpl" />
 
 </beans>
