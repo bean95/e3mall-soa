@@ -85,6 +85,7 @@ var E3 = {
         		var form = $(this).parentsUntil("form").parent("form");
         		//打开图片上传窗口
         		KindEditor.editor(E3.kingEditorParams).loadPlugin('multiimage',function(){
+					debugger;
         			var editor = this;
         			editor.plugin.multiImageDialog({
 						clickFn : function(urlList) {
