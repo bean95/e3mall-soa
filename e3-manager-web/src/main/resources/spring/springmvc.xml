@@ -45,7 +45,8 @@
 	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>	
 	
 	<dubbo:reference interface="com.e3mall.service.TbItemService" id="tbItemServiceImpl" /><!-- 创建对应的代理对象 -->
-	<dubbo:reference interface="com.e3mall.service.ItemCatService" id="itemCatServiceImpl" /><!-- 创建对应的代理对象 -->
+	<dubbo:reference interface="com.e3mall.service.ItemCatService" id="itemCatServiceImpl" />
 	<!-- 区分提供方： <dubbo:service -->
+	<dubbo:reference interface="com.e3mall.content.service.ContentCategoryService" id="contentCategoryServiceImpl" /><!-- 创建对应的代理对象 -->
 	
 </beans>

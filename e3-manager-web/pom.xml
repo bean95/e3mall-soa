@@ -10,9 +10,14 @@
   
   <dependencies>
 		<dependency>
-		<groupId>com.e3mall</groupId>
-		<artifactId>e3-manager-interface</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+			<groupId>com.e3mall</groupId>
+			<artifactId>e3-manager-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.e3mall</groupId>
+			<artifactId>e3-content-interface</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- JSP相关 -->
 		<dependency>

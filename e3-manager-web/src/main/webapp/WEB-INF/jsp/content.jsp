@@ -48,7 +48,7 @@ var contentListToolbar = [{
     		return ;
     	}
     	E3.createWindow({
-			url : "/content-add"
+			url : "/page/content-add"
 		}); 
     }
 },{

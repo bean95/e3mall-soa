@@ -18,6 +18,8 @@
 	<dubbo:application name="e3-manager" />
 	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" />
 	<!-- 用dubbo协议在20880端口暴露服务 -->
+	<!-- 暴露服务的端口：使用dubbo发布服务，运行在20880端口，所以其他工程必须运行在其他端口，否则冲突  -->
+	<!-- tomcat作用就是初始化一个spring容器 ， 其他都是运行在dubbo上 -->
 	<dubbo:protocol name="dubbo" port="20880" />
 	<!-- 声明需要暴露的服务接口 -->
 	<dubbo:service interface="com.e3mall.service.TbItemService" ref="tbItemServiceImpl" />

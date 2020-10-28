@@ -25,7 +25,7 @@ $(function(){
         },
         onAfterEdit : function(node){
         	var _tree = $(this);
-        	if(node.id == 0){
+        	if(node.id == 0){  //新增
         		// 新增节点
         		$.post("/content/category/create",{parentId:node.parentId,name:node.text},function(data){
         			if(data.status == 200){
@@ -37,7 +37,7 @@ $(function(){
         				$.messager.alert('提示','创建'+node.text+' 分类失败!');
         			}
         		});
-        	}else{
+        	}else{  //修改
         		$.post("/content/category/update",{id:node.id,name:node.text});
         	}
         }
@@ -48,10 +48,10 @@ function menuHandler(item){
 	var node = tree.tree("getSelected");
 	if(item.name === "add"){
 		tree.tree('append', {
-            parent: (node?node.target:null),
+            parent: (node?node.target:null),//当前节点
             data: [{
                 text: '新建分类',
-                id : 0,
+                id : 0,  //新建节点操作未完成，id仍然是0，结束后触发onAfterEdit事件保存返回最终id
                 parentId : node.id
             }]
         }); 
