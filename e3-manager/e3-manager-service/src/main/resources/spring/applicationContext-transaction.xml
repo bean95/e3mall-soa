@@ -9,14 +9,17 @@
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 
 
-    <!-- 事务控制器 -->
+    <!-- 事务管理器 -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <!-- 配置数据源 -->
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+	<!-- 开启对事务注解的支持 -->
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+
     <!-- 通知 -->
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+    <!-- <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="add*" propagation="REQUIRED"/>
             <tx:method name="append*" propagation="REQUIRED"/>
@@ -36,11 +39,11 @@
 
             <tx:method name="*" propagation="REQUIRED" read-only="true"/>
         </tx:attributes>
-    </tx:advice>
+    </tx:advice> -->
 
     <!-- 配置AOP -->
-    <aop:config>
+    <!-- <aop:config>
         <aop:advisor advice-ref="txAdvice" pointcut="execution(* com.e3mall.service.*.*(..))"/>
-    </aop:config>
+    </aop:config> -->
 
 </beans>

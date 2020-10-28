@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.e3mall.common.pojo.DataGridResult;
 import com.e3mall.common.utils.E3Result;
@@ -21,6 +22,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 
 @Service
+@Transactional(readOnly = true)
 public class TbItemServiceImpl implements TbItemService {
 	
 	@Autowired
@@ -44,6 +46,7 @@ public class TbItemServiceImpl implements TbItemService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public E3Result addItem(TbItem item, String desc) {
 		//生成商品id
 		long itemId = IDUtils.genItemId();
@@ -69,6 +72,7 @@ public class TbItemServiceImpl implements TbItemService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public E3Result updateItem(TbItem item, String desc) {
 		itemMapper.updateByPrimaryKeySelective(item);
 		TbItemDesc itemDesc = new TbItemDesc();
@@ -91,6 +95,7 @@ public class TbItemServiceImpl implements TbItemService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public E3Result deleteItem(long itemId) {
 		//物理删除
 		//itemMapper.deleteByPrimaryKey(itemId);
@@ -101,27 +106,26 @@ public class TbItemServiceImpl implements TbItemService {
 		item.setId(itemId);
 		item.setStatus((byte)3);
 		itemMapper.updateByPrimaryKeySelective(item);
-		
 		return E3Result.ok();
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public E3Result instock(long itemId) {
 		TbItem item = new TbItem();
 		item.setId(itemId);
 		item.setStatus((byte)2);
 		itemMapper.updateByPrimaryKeySelective(item);
-		
 		return E3Result.ok();
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public E3Result reshelf(long itemId) {
 		TbItem item = new TbItem();
 		item.setId(itemId);
 		item.setStatus((byte)1);
 		itemMapper.updateByPrimaryKeySelective(item);
-		
 		return E3Result.ok();
 	}
 
