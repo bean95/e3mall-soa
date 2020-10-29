@@ -8,11 +8,11 @@
   <artifactId>e3-portal-web</artifactId>
   <packaging>war</packaging>
   <dependencies>
-		<!-- <dependency>
+		<dependency>
 			<groupId>com.e3mall</groupId>
 			<artifactId>e3-content-interface</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency> -->
+		</dependency>
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework</groupId>

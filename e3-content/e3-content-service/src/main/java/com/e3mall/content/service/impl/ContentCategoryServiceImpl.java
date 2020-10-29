@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import com.e3mall.common.pojo.TreeNode;
@@ -17,6 +18,7 @@ import com.e3mall.pojo.TbContentCategoryExample;
 import com.e3mall.pojo.TbContentCategoryExample.Criteria;
 
 @Service
+@Transactional(readOnly = true)
 public class ContentCategoryServiceImpl implements ContentCategoryService {
 	
 	@Autowired
@@ -42,6 +44,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public E3Result addContentCategory(long parentId, String name) {
 		TbContentCategory category = new TbContentCategory();
 		category.setParentId(parentId);
@@ -62,6 +65,7 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public E3Result updateContentCategory(long id, String name) {
 		TbContentCategory category = new TbContentCategory();
 		category.setId(id);
@@ -72,29 +76,47 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	}
 
 	@Override
+	@Transactional(readOnly = false)
 	public E3Result removeContentCategory(long id) {
 		
-		//删除
-		TbContentCategory category = new TbContentCategory();
-		category.setId(id);
-		category.setStatus(0);
-		category.setUpdated(new Date());
-		contentCategoryMapper.updateByPrimaryKeySelective(category);
-		//判断父节点是否还有子节点
+		//删除-子节点/父节点
+		//父节点不允许删除
+		if(stillParent(id)) {
+			return new E3Result(999, "父节点不允许删除.", null);
+		}else {
+			
+			TbContentCategory category = contentCategoryMapper.selectByPrimaryKey(id);
+			//TbContentCategory category = new TbContentCategory();
+			category.setStatus(0);
+			category.setUpdated(new Date());
+			contentCategoryMapper.updateByPrimaryKey(category);
+			//判断父节点是否还有子节点
 
+			/*
+			TbContentCategoryExample example = new TbContentCategoryExample();
+			Criteria criteria = example.createCriteria();
+			criteria.andParentIdEqualTo(category.getParentId()).andStatusEqualTo(1);
+			List<TbContentCategory> child = contentCategoryMapper.selectByExample(example);
+			*/
+			if(stillParent(category.getParentId())) {
+				TbContentCategory parent = new TbContentCategory();
+				parent.setId(category.getParentId());
+				parent.setIsParent(false);
+				parent.setUpdated(new Date());
+				contentCategoryMapper.updateByPrimaryKeySelective(parent);
+			}
+			
+			return E3Result.ok();
+		}
+	}
+	
+	//private List<TbContentCategory> getChildByParentId(long parentId){
+	private boolean stillParent(long parentId) {
 		TbContentCategoryExample example = new TbContentCategoryExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andParentIdEqualTo(category.getParentId()).andStatusEqualTo(0);
+		criteria.andParentIdEqualTo(parentId).andStatusEqualTo(1);
 		List<TbContentCategory> child = contentCategoryMapper.selectByExample(example);
-		if(CollectionUtils.isEmpty(child)) {
-			TbContentCategory parent = new TbContentCategory();
-			parent.setId(category.getParentId());
-			parent.setIsParent(false);
-			parent.setUpdated(new Date());
-			contentCategoryMapper.updateByPrimaryKeySelective(parent);
-		}
-		
-		return E3Result.ok();
+		return !CollectionUtils.isEmpty(child);
 	}
 
 }

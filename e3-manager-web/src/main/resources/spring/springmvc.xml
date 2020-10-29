@@ -47,6 +47,6 @@
 	<dubbo:reference interface="com.e3mall.service.TbItemService" id="tbItemServiceImpl" /><!-- 创建对应的代理对象 -->
 	<dubbo:reference interface="com.e3mall.service.ItemCatService" id="itemCatServiceImpl" />
 	<!-- 区分提供方： <dubbo:service -->
-	<dubbo:reference interface="com.e3mall.content.service.ContentCategoryService" id="contentCategoryServiceImpl" /><!-- 创建对应的代理对象 -->
-	
+	<dubbo:reference interface="com.e3mall.content.service.ContentCategoryService" id="contentCategoryServiceImpl" />
+	<dubbo:reference interface="com.e3mall.content.service.ContentService" id="contentServiceImpl" />
 </beans>
