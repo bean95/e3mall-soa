@@ -17,7 +17,7 @@ public class ContentController {
 	@Autowired
 	private ContentService contentServiceImpl;
 
-	@RequestMapping(name = "/save",method = RequestMethod.POST)
+	@RequestMapping(value = "/save",method = RequestMethod.POST)
 	public E3Result addContent(TbContent content) {
 		return contentServiceImpl.addContent(content);
 	}
