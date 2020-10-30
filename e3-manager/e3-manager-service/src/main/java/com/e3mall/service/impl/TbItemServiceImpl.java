@@ -40,6 +40,7 @@ public class TbItemServiceImpl implements TbItemService {
 		
 		PageHelper.startPage(page, rows);
 		TbItemExample example = new TbItemExample();
+		example.setOrderByClause("UPDATED desc");
 		List<TbItem> list = itemMapper.selectByExample(example);
 		PageInfo<TbItem> pageInfo = new PageInfo<>(list);
 		return new DataGridResult<>(pageInfo.getTotal(), list);
@@ -105,6 +106,7 @@ public class TbItemServiceImpl implements TbItemService {
 		TbItem item = new TbItem();
 		item.setId(itemId);
 		item.setStatus((byte)3);
+		item.setUpdated(new Date());
 		itemMapper.updateByPrimaryKeySelective(item);
 		return E3Result.ok();
 	}
@@ -115,6 +117,7 @@ public class TbItemServiceImpl implements TbItemService {
 		TbItem item = new TbItem();
 		item.setId(itemId);
 		item.setStatus((byte)2);
+		item.setUpdated(new Date());
 		itemMapper.updateByPrimaryKeySelective(item);
 		return E3Result.ok();
 	}
@@ -125,6 +128,7 @@ public class TbItemServiceImpl implements TbItemService {
 		TbItem item = new TbItem();
 		item.setId(itemId);
 		item.setStatus((byte)1);
+		item.setUpdated(new Date());
 		itemMapper.updateByPrimaryKeySelective(item);
 		return E3Result.ok();
 	}

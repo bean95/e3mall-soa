@@ -13,9 +13,12 @@ import com.e3mall.common.pojo.TreeNode;
 import com.e3mall.common.utils.E3Result;
 import com.e3mall.content.service.ContentCategoryService;
 import com.e3mall.mapper.TbContentCategoryMapper;
+import com.e3mall.mapper.TbContentMapper;
+import com.e3mall.pojo.TbContent;
 import com.e3mall.pojo.TbContentCategory;
 import com.e3mall.pojo.TbContentCategoryExample;
 import com.e3mall.pojo.TbContentCategoryExample.Criteria;
+import com.e3mall.pojo.TbContentExample;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,13 +26,15 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	
 	@Autowired
 	private TbContentCategoryMapper contentCategoryMapper;
+	@Autowired
+	private TbContentMapper contentMapper;
 
 	@Override
 	public List<TreeNode> getContentCatTreeList(long parentId) {
 		
 		TbContentCategoryExample example = new TbContentCategoryExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andParentIdEqualTo(parentId);	
+		criteria.andParentIdEqualTo(parentId).andStatusEqualTo(1);	
 		List<TbContentCategory> catList = contentCategoryMapper.selectByExample(example);
 		
 		List<TreeNode> tree = new ArrayList<>();
@@ -81,8 +86,11 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 		
 		//删除-子节点/父节点
 		//父节点不允许删除
+		//该类型有内容不可删除
 		if(stillParent(id)) {
 			return new E3Result(999, "父节点不允许删除.", null);
+		}else if(!noContent(id)){
+			return new E3Result(999, "请先删除该分类内容.", null);
 		}else {
 			
 			TbContentCategory category = contentCategoryMapper.selectByPrimaryKey(id);
@@ -117,6 +125,14 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 		criteria.andParentIdEqualTo(parentId).andStatusEqualTo(1);
 		List<TbContentCategory> child = contentCategoryMapper.selectByExample(example);
 		return !CollectionUtils.isEmpty(child);
+	}
+	
+	private boolean noContent(long id) {
+		TbContentExample example = new TbContentExample();
+		com.e3mall.pojo.TbContentExample.Criteria criteria = example.createCriteria();
+		criteria.andCategoryIdEqualTo(id);
+		List<TbContent> selectByExample = contentMapper.selectByExample(example);
+		return CollectionUtils.isEmpty(selectByExample);
 	}
 
 }

@@ -49,14 +49,19 @@ public class TbItemController {
 	@ResponseBody
 	public E3Result updateItem(TbItem item,String desc) {
 		E3Result result = itemServiceImpl.updateItem(item, desc);
-		return null;
+		return result;
 	}
 	
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	@ResponseBody
-	public E3Result deleteItem(long ids) {
-		E3Result result = itemServiceImpl.deleteItem(ids);
-		return result;
+	public E3Result deleteItem(String ids) {
+		//E3Result result = itemServiceImpl.deleteItem(ids);
+		//TODO  删除fastDFS中对应的图片
+		String[] idArr = ids.split(",");
+		for(String id : idArr) {
+			itemServiceImpl.deleteItem(Long.parseLong(id));
+		}
+		return E3Result.ok();
 	}
 	
 	@RequestMapping("/query/item/desc/{itemId}")
@@ -67,16 +72,26 @@ public class TbItemController {
 	
 	@RequestMapping(value="/instock", method=RequestMethod.POST)
 	@ResponseBody
-	public E3Result instock(long ids) {
-		E3Result result = itemServiceImpl.instock(ids);
-		return result;
+	public E3Result instock(String ids) {
+		//E3Result result = itemServiceImpl.instock(ids);
+		String[] idArr = ids.split(",");
+		for(String id : idArr) {
+			itemServiceImpl.instock(Long.parseLong(id));
+		}
+		return E3Result.ok();
+		//return result;
 	}
 	
 	@RequestMapping(value="/reshelf", method=RequestMethod.POST)
 	@ResponseBody
-	public E3Result reshelf(long ids) {
-		E3Result result = itemServiceImpl.reshelf(ids);
-		return result;
+	public E3Result reshelf(String ids) {
+		//E3Result result = itemServiceImpl.reshelf(ids);
+		//return result;
+		String[] idArr = ids.split(",");
+		for(String id : idArr) {
+			itemServiceImpl.reshelf(Long.parseLong(id));
+		}
+		return E3Result.ok();
 	}
 
 }

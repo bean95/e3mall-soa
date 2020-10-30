@@ -12,4 +12,5 @@ public interface ContentService {
 	List<TbContent> getContentListByCid(long cid);
 	DataGridResult<TbContent> getcontentPageList(int page,int rows);
 	E3Result updateContent(TbContent content);
+	E3Result removeContent(long id);
 }

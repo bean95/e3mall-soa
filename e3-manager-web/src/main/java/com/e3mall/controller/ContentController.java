@@ -26,4 +26,13 @@ public class ContentController {
 	public DataGridResult<TbContent> getContentPageList(int page,int rows) {
 		return contentServiceImpl.getcontentPageList(page, rows);
 	}
+	
+	@RequestMapping("/delete")
+	public E3Result delContent(String ids) {
+		String[] idArr = ids.split(",");
+		for(String id : idArr) {
+			contentServiceImpl.removeContent(Long.parseLong(id));
+		}
+		return E3Result.ok();
+	}
 }

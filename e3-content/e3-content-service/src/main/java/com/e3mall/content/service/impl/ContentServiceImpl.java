@@ -81,4 +81,13 @@ public class ContentServiceImpl implements ContentService {
 		return E3Result.ok();
 	}
 
+	@Override
+	@Transactional(readOnly = false)
+	public E3Result removeContent(long id) {
+		TbContent content = contentMapper.selectByPrimaryKey(id);
+		contentMapper.deleteByPrimaryKey(id);
+		jedisClient.hdel(CONTENT_REDIS_KEY, content.getCategoryId().toString());
+		return E3Result.ok();
+	}
+
 }
