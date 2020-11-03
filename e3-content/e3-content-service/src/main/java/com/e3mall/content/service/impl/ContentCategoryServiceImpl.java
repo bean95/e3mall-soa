@@ -51,22 +51,29 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 	@Override
 	@Transactional(readOnly = false)
 	public E3Result addContentCategory(long parentId, String name) {
-		TbContentCategory category = new TbContentCategory();
-		category.setParentId(parentId);
-		category.setName(name);
-		category.setStatus(1);  //1正常  0删除
-		category.setSortOrder(1);
-		category.setIsParent(false);
-		category.setCreated(new Date());
-		category.setUpdated(category.getCreated());
-		contentCategoryMapper.insert(category);
-		//
-		TbContentCategory parent = contentCategoryMapper.selectByPrimaryKey(parentId);
-		if(!parent.getIsParent()) {
-			parent.setIsParent(true);
-			contentCategoryMapper.updateByPrimaryKey(parent);
+		
+		//TODO 该parentId是否有内容，有内容则不允许添加
+		if(noContent(parentId)) {
+			TbContentCategory category = new TbContentCategory();
+			category.setParentId(parentId);
+			category.setName(name);
+			category.setStatus(1);  //1正常  0删除
+			category.setSortOrder(1);
+			category.setIsParent(false);
+			category.setCreated(new Date());
+			category.setUpdated(category.getCreated());
+			contentCategoryMapper.insert(category);
+			//
+			TbContentCategory parent = contentCategoryMapper.selectByPrimaryKey(parentId);
+			if(!parent.getIsParent()) {
+				parent.setIsParent(true);
+				contentCategoryMapper.updateByPrimaryKey(parent);
+			}
+			return E3Result.ok(category);
+		}else {
+			return new E3Result(999, "请先删除该分类内容.", null);
 		}
-		return E3Result.ok(category);
+		
 	}
 
 	@Override
@@ -95,9 +102,10 @@ public class ContentCategoryServiceImpl implements ContentCategoryService {
 			
 			TbContentCategory category = contentCategoryMapper.selectByPrimaryKey(id);
 			//TbContentCategory category = new TbContentCategory();
-			category.setStatus(0);
-			category.setUpdated(new Date());
-			contentCategoryMapper.updateByPrimaryKey(category);
+			///category.setStatus(0);
+			///category.setUpdated(new Date());
+			///contentCategoryMapper.updateByPrimaryKey(category);
+			contentCategoryMapper.deleteByPrimaryKey(id);
 			//判断父节点是否还有子节点
 
 			/*

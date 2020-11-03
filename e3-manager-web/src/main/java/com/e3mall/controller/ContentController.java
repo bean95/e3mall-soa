@@ -35,4 +35,9 @@ public class ContentController {
 		}
 		return E3Result.ok();
 	}
+	
+	@RequestMapping("/edit")
+	public E3Result editContent(TbContent content) {
+		return contentServiceImpl.updateContent(content);
+	}
 }
