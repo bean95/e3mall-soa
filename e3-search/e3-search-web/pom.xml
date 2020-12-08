@@ -2,23 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.e3mall</groupId>
-    <artifactId>e3-parent</artifactId>
+    <artifactId>e3-search</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>e3-manager-web</artifactId>
+  <artifactId>e3-search-web</artifactId>
   <packaging>war</packaging>
-  
   <dependencies>
-		<dependency>
-			<groupId>com.e3mall</groupId>
-			<artifactId>e3-manager-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.e3mall</groupId>
-			<artifactId>e3-content-interface</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
 		<dependency>
 			<groupId>com.e3mall</groupId>
 			<artifactId>e3-search-interface</artifactId>
@@ -119,10 +108,9 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<configuration>
 					<path>/</path>
-					<port>8081</port>
+					<port>8085</port>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-  
 </project>

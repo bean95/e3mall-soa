@@ -1,0 +1,47 @@
+
+
+1.zookeeper
+
+2.redis
+	redis-server.exe redis.windows.conf
+	
+3.fastDFS
+
+4.solr
+	cd bin
+	solr start
+	solr stop -p ****
+
+
+5.	
+	install:
+		e3-parent
+		e3-common
+		e3-content
+		e3-manager ==skip
+		e3-search
+		e3-search-web
+		e3-manager-web  ==skip
+		e3-portal-web
+		
+	run:
+		e3-content
+		e3-manager
+		e3-search
+		e3-search-web
+		e3-manager-web
+		e3-portal-web
+		
+		
+		
+Todo:
+	上传商品信息时不选择商品类目 报 500
+	
+		
+		
+		
+		
+		
+		
+		
+		
