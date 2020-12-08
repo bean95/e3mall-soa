@@ -12,5 +12,13 @@
    	left join tb_item_cat b on a.cid = b.id  
    	where a.status = '1' 
   </select>
+  <select id="getItemById" resultType="com.e3mall.common.pojo.SearchItem" >
+    select
+    <include refid="Base_Column_List" />
+    from tb_item a 
+   	left join tb_item_cat b on a.cid = b.id  
+   	where a.status = '1' 
+   	  and a.id = #{itemId}
+  </select>
  
 </mapper>

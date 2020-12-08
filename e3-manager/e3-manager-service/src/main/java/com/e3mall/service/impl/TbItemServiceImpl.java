@@ -3,7 +3,15 @@ package com.e3mall.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +23,6 @@ import com.e3mall.mapper.TbItemMapper;
 import com.e3mall.pojo.TbItem;
 import com.e3mall.pojo.TbItemDesc;
 import com.e3mall.pojo.TbItemDescExample;
-import com.e3mall.pojo.TbItemDescExample.Criteria;
 import com.e3mall.pojo.TbItemExample;
 import com.e3mall.service.TbItemService;
 import com.github.pagehelper.PageHelper;
@@ -29,6 +36,11 @@ public class TbItemServiceImpl implements TbItemService {
 	private TbItemMapper itemMapper;
 	@Autowired
 	private TbItemDescMapper itemDescMapper;
+	@Autowired
+	private JmsTemplate jmsTemplate;
+	@Resource
+	private Destination topicDestination;
+	
 
 	@Override
 	public TbItem get(Long id) {
@@ -68,6 +80,16 @@ public class TbItemServiceImpl implements TbItemService {
 		itemDesc.setUpdated(new Date());
 		//向商品描述表插入数据
 		itemDescMapper.insert(itemDesc);
+		
+		//发送消息到mq
+		//可能这边添加item的事务未提交成功，listener那边就根据id取数据了，会报空指针
+		jmsTemplate.send(topicDestination, new MessageCreator() {
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+				return session.createTextMessage(item.getId().toString());
+			}
+		});
+		
 		//返回成功
 		return E3Result.ok();
 	}
