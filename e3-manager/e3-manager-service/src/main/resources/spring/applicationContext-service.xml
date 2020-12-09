@@ -10,6 +10,10 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 	
+	<!-- 经研究发现spring扫描注册PropertyPlaceholderConfigurer的bean被设置为单例模式，spring只会扫描一个PropertyPlaceholderConfigurer
+	             或者<context:property-placeholder>配置，其它多余将被忽略，所以才会出现替代属性值的占位符无法解析。 -->
+	<context:property-placeholder location="classpath:conf/resource.properties" ignore-unresolvable="true"/>
+	
     <!-- 扫描service层注解 -->
     <context:component-scan base-package="com.e3mall.service"/>
     

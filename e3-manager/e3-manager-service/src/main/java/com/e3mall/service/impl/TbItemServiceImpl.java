@@ -9,15 +9,19 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.e3mall.common.jedis.JedisApiClient;
 import com.e3mall.common.pojo.DataGridResult;
 import com.e3mall.common.utils.E3Result;
 import com.e3mall.common.utils.IDUtils;
+import com.e3mall.common.utils.JsonUtils;
 import com.e3mall.mapper.TbItemDescMapper;
 import com.e3mall.mapper.TbItemMapper;
 import com.e3mall.pojo.TbItem;
@@ -40,11 +44,27 @@ public class TbItemServiceImpl implements TbItemService {
 	private JmsTemplate jmsTemplate;
 	@Resource
 	private Destination topicDestination;
+	@Autowired
+	private JedisApiClient jedisClient;
+	
+	@Value("${REDIS_ITEM_PRE}")
+	private String REDIS_ITEM_PRE;
+	@Value("${ITEM_CACHE_EXPIRE}")
+	private Integer ITEM_CACHE_EXPIRE;
 	
 
 	@Override
 	public TbItem get(Long id) {
-		return itemMapper.selectByPrimaryKey(id);
+		TbItem item = null;
+		String json = jedisClient.get(REDIS_ITEM_PRE+":"+id+":BASE");
+		if(StringUtils.isNotBlank(json)) {
+			item = JsonUtils.jsonToPojo(json, TbItem.class);
+			return item;
+		}
+		item = itemMapper.selectByPrimaryKey(id);
+		jedisClient.set(REDIS_ITEM_PRE + ":" + id + ":BASE", JsonUtils.objectToJson(item));
+		jedisClient.expire(REDIS_ITEM_PRE + ":" + id + ":BASE", ITEM_CACHE_EXPIRE);
+		return item;
 	}
 
 	@Override
@@ -109,11 +129,20 @@ public class TbItemServiceImpl implements TbItemService {
 	
 	@Override
 	public E3Result getDescByItemId(long itemId) {
-		TbItemDescExample example = new TbItemDescExample();
+		//TbItemDescExample example = new TbItemDescExample();
 		//Criteria criteria = example.createCriteria();
 		//criteria.andItemIdEqualTo(itemId);
 		//TbItemDesc desc = itemDescMapper.selectByExample(example).get(0);
-		TbItemDesc desc = itemDescMapper.selectByPrimaryKey(itemId);
+		
+		TbItemDesc desc = null;
+		String json = jedisClient.get(REDIS_ITEM_PRE + ":" + itemId + ":DESC");
+		if(StringUtils.isNotBlank(json)) {
+			desc = JsonUtils.jsonToPojo(json, TbItemDesc.class);
+			return new E3Result(desc);
+		}
+		desc = itemDescMapper.selectByPrimaryKey(itemId);
+		jedisClient.set(REDIS_ITEM_PRE + ":" + itemId + ":DESC", JsonUtils.objectToJson(desc));
+		jedisClient.expire(REDIS_ITEM_PRE + ":" + itemId + ":DESC", ITEM_CACHE_EXPIRE);
 		return new E3Result(desc);
 	}
 
