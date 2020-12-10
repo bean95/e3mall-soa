@@ -12,6 +12,16 @@
 	
 	<!-- 经研究发现spring扫描注册PropertyPlaceholderConfigurer的bean被设置为单例模式，spring只会扫描一个PropertyPlaceholderConfigurer
 	             或者<context:property-placeholder>配置，其它多余将被忽略，所以才会出现替代属性值的占位符无法解析。 -->
+         <!--  
+         	<bean id="propertyPlaceholderConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			    <property name="locations">
+			        <list>
+			            <value>classpath:jdbc.properties</value>
+			            <value>classpath:cache/redis.properties</value>
+			        </list>
+			    </property>
+			</bean>
+         -->
 	<context:property-placeholder location="classpath:conf/resource.properties" ignore-unresolvable="true"/>
 	
     <!-- 扫描service层注解 -->

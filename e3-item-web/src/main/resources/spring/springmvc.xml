@@ -11,7 +11,7 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
         
         
-    <!-- <context:property-placeholder location="classpath:conf/resource.properties" /> -->
+    <context:property-placeholder location="classpath:conf/resource.properties" />
         
     <!-- 扫描组件 -->
     <context:component-scan base-package="com.e3mall.item.controller"/>
@@ -27,6 +27,12 @@
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
+    
+    <bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
     
     <dubbo:application name="e3-item-web"/>
 	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>	
