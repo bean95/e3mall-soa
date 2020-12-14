@@ -11,27 +11,47 @@
 	5.activeMq:
 		cd bin\win64  click bat
 		http://localhost:8161/admin/    admin/admin
+	6.nginx
 
 	6.	
 		install:
-			e3-parent
-			e3-common
-			e3-content
-			e3-manager ==skip
-			e3-search
-			e3-search-web
-			e3-manager-web  ==skip
-			e3-portal-web
+			parent
+			common
+			content
+			manager ==skip
+			search
+			search-web
+			manager-web  ==skip
+			portal-web
 			
 		run:
-			e3-content
-			e3-manager
-			e3-search
-			e3-search-web
-			e3-manager-web
-			e3-portal-web
-			e3-item-web
-		
+			content
+			manager
+			search
+			search-web
+			manager-web
+			===portal-web
+			item-web
+
+Tomcat端口：
+
+     content:
+     manager:
+ manager-web:
+  portal-web:
+    item-web:
+      search:	
+  search-web:
+	     sso:  
+	 sso-web:  8088
+	
+	
+	
+Dubbo端口：
+	manager-service: 20880
+	content-service: 20881
+	search-service:	 20882
+	sso-service:	 20883
 		
 		
 Todo:
@@ -42,7 +62,9 @@ Todo:
 	solr集群部署
 		
 		
-		
+思路：
+	1) 根据tokenId查询用户信息，同时更新过期时间为最大
+	2) 跨域原理： 可跨域加载js文件
 		
 		
 		

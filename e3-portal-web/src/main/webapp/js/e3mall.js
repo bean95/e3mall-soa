@@ -1,12 +1,12 @@
 var E3MALL = {
 	checkLogin : function(){
-		var _ticket = $.cookie("TT_TOKEN");
+		var _ticket = $.cookie("token");
 		if(!_ticket){
 			return ;
 		}
 		$.ajax({
 			url : "http://localhost:8088/user/token/" + _ticket,
-			dataType : "jsonp",
+			dataType : "jsonp",//callback函数 jquery预先定义好
 			type : "GET",
 			success : function(data){
 				if(data.status == 200){

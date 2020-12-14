@@ -10,6 +10,8 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
 	
+	<context:property-placeholder location="classpath:conf/resource.properties" ignore-unresolvable="true"/>
+	
     <!-- 扫描service层注解 -->
     <context:component-scan base-package="com.e3mall.sso.service"/>
     
@@ -20,7 +22,8 @@
 	<!-- 用dubbo协议在20880端口暴露服务 -->
 	<dubbo:protocol name="dubbo" port="20883" />
 	<!-- 声明需要暴露的服务接口 -->
-	<!-- <dubbo:service interface="com.e3mall.content.service.ContentCategoryService" ref="contentCategoryServiceImpl" timeout="600000"/>
-	<dubbo:service interface="com.e3mall.content.service.ContentService" ref="contentServiceImpl" timeout="600000"/> -->
-
+	<dubbo:service interface="com.e3mall.sso.service.RegisterService" ref="registerServiceImpl" timeout="600000"/>
+	<dubbo:service interface="com.e3mall.sso.service.LoginService" ref="loginServiceImpl" timeout="600000"/>
+	<dubbo:service interface="com.e3mall.sso.service.TokenService" ref="tokenServiceImpl" timeout="600000"/>
+	
 </beans>
