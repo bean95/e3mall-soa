@@ -44,7 +44,7 @@
          	<li>
          		<span>索引库管理</span>
          		<ul>
-	         		<li data-options="attributes:{'url':'index-item'}">solr索引库维护</li>
+	         		<li data-options="attributes:{'url':'index-item'}">solr索引库维护-重置</li>
 	         	</ul>
          	</li>
          </ul>

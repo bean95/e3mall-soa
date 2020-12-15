@@ -96,4 +96,12 @@ public class SolrTest {
 		}
 		
 	}
+	
+	@Test
+	public void clean() throws Exception  {
+		SolrServer solrServer = new HttpSolrServer("http://localhost:8983/solr/mycore");
+		solrServer.deleteByQuery("id:doc01");  //根据查询 删除
+		solrServer.deleteByQuery("*:*");
+		solrServer.commit();
+	}
 }

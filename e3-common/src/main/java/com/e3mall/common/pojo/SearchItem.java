@@ -14,6 +14,7 @@ public class SearchItem implements Serializable {
 	private long price;
 	private String image;
 	private String categoryName;
+	private String updateDate;
 	
 	public String getId() {
 		return id;
@@ -50,6 +51,12 @@ public class SearchItem implements Serializable {
 	}
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+	public String getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
 	}
 	public String[] getImages() {
 		if (image != null && !"".equals(image)) {

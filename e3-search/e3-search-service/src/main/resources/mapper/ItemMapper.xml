@@ -3,7 +3,7 @@
 <mapper namespace="com.e3mall.search.mapper.ItemMapper" >
 
   <sql id="Base_Column_List" >
-    a.id,a.title,a.sell_point as "sellPoint",a.price,a.image,b.`name` "categoryName" 
+    a.id,a.title,a.sell_point as "sellPoint",a.price,a.image,a.updated as "updateDate",b.`name` "categoryName" 
   </sql>
   <select id="getItemList" resultType="com.e3mall.common.pojo.SearchItem" >
     select

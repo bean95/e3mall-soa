@@ -1,6 +1,7 @@
 package com.e3mall.search.service.impl;
 
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,12 +19,15 @@ public class SearchServiceImpl implements SearchService {
 	public SearchResult search(String keyword, int page, int rows) throws Exception {
 		
 		SolrQuery query = new SolrQuery();
+		
 		query.setQuery(keyword);
 		if(page <= 0) page = 1;
 		query.setStart((page-1)*rows);
 		query.setRows(rows);
 		//设置默认搜索域
 		query.set("df", "item_title");
+		//query.setSort("item_update_date", SolrQuery.ORDER.desc);
+		query.setSort("item_update_date", ORDER.desc);
 		//高亮
 		query.setHighlight(true);
 		query.addHighlightField("item_title");

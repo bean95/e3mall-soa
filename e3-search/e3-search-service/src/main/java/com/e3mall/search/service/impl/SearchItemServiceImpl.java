@@ -24,6 +24,7 @@ public class SearchItemServiceImpl implements SearchItemService {
 	@Override
 	public E3Result importAllItems() {
 		try {
+		solrServer.deleteByQuery("*:*");  //清空原有数据--重置
 		List<SearchItem> itemList = itemMapper.getItemList();
 			for(SearchItem searchItem : itemList) {
 				SolrInputDocument document = new SolrInputDocument();
@@ -32,6 +33,7 @@ public class SearchItemServiceImpl implements SearchItemService {
 				document.addField("item_sell_point", searchItem.getSellPoint());
 				document.addField("item_price", searchItem.getPrice());
 				document.addField("item_image", searchItem.getImage());
+				document.addField("item_update_date", searchItem.getUpdateDate());
 				document.addField("item_category_name", searchItem.getCategoryName());
 				solrServer.add(document);
 		}

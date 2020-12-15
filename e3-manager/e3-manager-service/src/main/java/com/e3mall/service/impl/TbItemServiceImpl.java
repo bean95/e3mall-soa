@@ -150,15 +150,17 @@ public class TbItemServiceImpl implements TbItemService {
 	@Transactional(readOnly = false)
 	public E3Result deleteItem(long itemId) {
 		//物理删除
-		//itemMapper.deleteByPrimaryKey(itemId);
-		//itemDescMapper.deleteByPrimaryKey(itemId);
+		itemMapper.deleteByPrimaryKey(itemId);
+		itemDescMapper.deleteByPrimaryKey(itemId);
 		
 		//逻辑删除
+		/**
 		TbItem item = new TbItem();
 		item.setId(itemId);
 		item.setStatus((byte)3);
 		item.setUpdated(new Date());
 		itemMapper.updateByPrimaryKeySelective(item);
+		**/
 		return E3Result.ok();
 	}
 
