@@ -27,11 +27,20 @@
         <property name="prefix" value="/WEB-INF/jsp/" />
         <property name="suffix" value=".jsp" />
     </bean>
+    
+    <mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.e3mall.car.interceptor.LoginInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 	
 	<!-- 引用dubbo服务 -->
 	<dubbo:application name="e3-car-web"/>
 	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>	
 	
 	<dubbo:reference interface="com.e3mall.service.TbItemService" id="tbItemServiceImpl" />
+	<dubbo:reference interface="com.e3mall.sso.service.TokenService" id="tokenServiceImpl" />
+	<dubbo:reference interface="com.e3mall.car.service.CarService" id="carServiceImpl" />
 	
 </beans>

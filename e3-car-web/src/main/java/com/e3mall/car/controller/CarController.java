@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.e3mall.car.service.CarService;
 import com.e3mall.common.utils.CookieUtils;
 import com.e3mall.common.utils.E3Result;
 import com.e3mall.common.utils.JsonUtils;
 import com.e3mall.pojo.TbItem;
+import com.e3mall.pojo.TbUser;
 import com.e3mall.service.TbItemService;
 
 @Controller
@@ -28,11 +30,18 @@ public class CarController {
 	private TbItemService tbItemServiceImpl;
 	@Value("${COOKIE_CART_EXPIRE}")
 	private Integer COOKIE_CART_EXPIRE;
-
+	@Autowired
+	private CarService carServiceImpl;
+	
 	
 	@RequestMapping("/cart/add/{itemId}")
 	public String addCar(@PathVariable Long itemId, @RequestParam(defaultValue="1")Integer num, HttpServletRequest request, HttpServletResponse response) {
 		
+		TbUser user = (TbUser)request.getAttribute("user");
+		if(user != null) {  //登录-redis， 未登录-cookie
+			carServiceImpl.addCart(user.getId(), itemId, num);
+			return "cartSuccess";
+		}
 		/**
 		 	未登录：
 		 		查询cookie，是否已存在carList
@@ -72,8 +81,17 @@ public class CarController {
 	
 	@RequestMapping("/cart/cart")
 	public String carList(HttpServletRequest request, HttpServletResponse response) {
-		List<TbItem> carList = getCarListFromCookie(request);
-		request.setAttribute("cartList", carList);
+		
+		List<TbItem> cartList = getCarListFromCookie(request);
+		TbUser user = (TbUser)request.getAttribute("user");
+		if(user != null) {  //登录-redis， 未登录-cookie
+			if(cartList!=null && cartList.size()>0) {
+				carServiceImpl.mergeCart(user.getId(), cartList);
+				CookieUtils.deleteCookie(request, response, "cart");
+			}
+			cartList = carServiceImpl.getCartList(user.getId());
+		}		
+		request.setAttribute("cartList", cartList);
 		return "cart";
 	}
 	
@@ -86,6 +104,18 @@ public class CarController {
 		
 		//从cookie中取购物车列表
 		List<TbItem> carList = getCarListFromCookie(request);
+		
+		TbUser user = (TbUser) request.getAttribute("user");
+		if (user != null) {
+			if(carList!=null && carList.size()>0) {  //列表页面不刷新，在另外页面登录时
+				carServiceImpl.mergeCart(user.getId(), carList);
+				CookieUtils.deleteCookie(request, response, "cart");
+			}
+			carServiceImpl.updateCartNum(user.getId(), itemId, num);
+			return E3Result.ok();
+		}
+		
+		
 		//遍历商品列表找到对应的商品
 		for (TbItem tbItem : carList) {
 			if (tbItem.getId().longValue() == itemId) {
@@ -104,6 +134,17 @@ public class CarController {
 	public String deleteCartItem(@PathVariable Long itemId, HttpServletRequest request, HttpServletResponse response) {
 		
 		List<TbItem> carList = getCarListFromCookie(request);
+		TbUser user = (TbUser) request.getAttribute("user");
+		if (user != null) {
+			if(carList!=null && carList.size()>0) {  //列表页面不刷新，在另外页面登录时
+				carServiceImpl.mergeCart(user.getId(), carList);
+				CookieUtils.deleteCookie(request, response, "cart");
+			}
+			carServiceImpl.deleteCartItem(user.getId(), itemId);
+			return "redirect:/cart/cart.html";
+		}
+		
+		//List<TbItem> carList = getCarListFromCookie(request);
 		//遍历列表，找到要删除的商品
 		for (TbItem tbItem : carList) {
 			if (tbItem.getId().longValue() == itemId) {

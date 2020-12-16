@@ -20,6 +20,6 @@
 	<!-- 用dubbo协议在20880端口暴露服务 -->
 	<dubbo:protocol name="dubbo" port="20884" />
 	<!-- 声明需要暴露的服务接口 -->
-	<!-- <dubbo:service interface="com.e3mall.content.service.ContentCategoryService" ref="contentCategoryServiceImpl" timeout="600000"/> -->
+	<dubbo:service interface="com.e3mall.car.service.CarService" ref="carServiceImpl" timeout="600000"/>
 
 </beans>
